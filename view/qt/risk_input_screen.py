@@ -75,26 +75,26 @@ class RiskInputScreen(QWidget):
             left_col,
             "💡",
             "Lighting Condition",
-            ["daylight", "bright", "darkness-light lit", "light lit", "darkness-lights unlit", "unlit", "no lighting"]
+            ["daylight", "dusk", "darkness-light lit", "darkness"]
         )
         self.road_condition = self._combo_row(
             left_col,
             "🚧",
             "Road Condition",
-            ["dry", "normal", "wet", "slippery", "muddy", "sand", "flood"]
+            ["dry", "damp", "wet", "flood"]
         )
         self.road_type = self._combo_row(
             left_col,
             "🛣️",
             "Road Infrastructure",
-            ["city road", "one way", "roundabout", "slip road", "highway", "rural road", "mountain road"]
+            ["city road", "rural road", "highway", "mountain road"]
         )
 
         self.weather = self._combo_row(
             right_col,
             "☁️",
             "Weather Condition",
-            ["clear", "sunny", "windy", "fog", "foggy", "rain", "heavy rain", "storm"]
+            ["clear", "windy", "fog", "rain"]
         )
         self.traffic_density = self._combo_row(
             right_col,
@@ -106,7 +106,7 @@ class RiskInputScreen(QWidget):
             right_col,
             "🕒",
             "Time Based Data",
-            ["morning", "afternoon", "evening", "night"]
+            ["morning", "afternoon", "evening"]
         )
         self.vehicle_age = self._spin_row(right_col, "🔧", "Vehicle Age", 0, 21, 5)
         self.failure_history = self._combo_row(
@@ -126,6 +126,30 @@ class RiskInputScreen(QWidget):
             "🔩",
             "Brake Condition",
             ["good", "fair", "poor"]
+        )
+        self.vehicle_type = self._combo_row(
+            right_col,
+            "🚙",
+            "Vehicle Type",
+            ["car", "van", "bus", "truck", "motorcycle"]
+        ) 
+        self.road_defect = self._combo_row(
+            right_col,
+            "🕳️",
+            "Road Defect",
+            ["no defect", "worn surface", "rust/holes"]
+        )
+        self.intersection_related = self._combo_row(
+            right_col,
+            "➕"
+            "Intersection",
+            ["no intersection", "at intersection"]
+        )
+        self.speed_limit = self._spin_row(
+            right_col,
+            "🚦",
+            "Speed Limit",
+            30, 213, 60
         )
 
         content_row.addLayout(left_col, 1)
@@ -298,7 +322,12 @@ class RiskInputScreen(QWidget):
             "road_condition": self.road_condition.currentText(),
             "time_of_day": self.time_of_day.currentText(),
             "road_type": self.road_type.currentText(),
+            "vehicle_type": self.vehicle_type.currentText(),
+            "road_defect": self.road_defect.currentText(),
+            "intersection": self.intersection_related.currentText(),
+            "speed_limit": int(self.speed_limit.value()),
         }
+            
         self.evaluate_requested.emit(inputs)
 
     def clear_form(self):

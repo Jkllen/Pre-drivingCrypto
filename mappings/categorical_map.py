@@ -5,79 +5,61 @@ def safe_get(mapping, key):
 
 weather_map = {
     "clear": 0.1,
-    "sunny": 0.1,
     "windy": 0.5,
-    "fog": 0.6,
-    "foggy": 0.6,
+    "fog": 0.5,
     "rain": 0.9,
-    "heavy rain": 1.0,
-    "storm": 1.0,
 }
 
 light_map = {
     "daylight": 0.1,
-    "bright": 0.1,
-    "darkness-light lit": 0.4,
-    "light lit": 0.4,
-    "darkness-lights unlit": 0.8,
-    "unlit": 0.8,
-    "no lighting": 0.9,
+    "dusk": 0.5,
+    "darkness-light lit": 0.5,
+    "darkness": 0.9,
 }
 
 road_map = {
     "dry": 0.1,
-    "normal": 0.1,
+    "damp": 0.5,
     "wet": 0.5,
-    "slippery": 0.6,
-    "muddy": 0.8,
-    "sand": 0.8,
-    "flood": 1.0,
+    "flood": 0.9,
 }
 
 vehicle_type_map = {
     "car": 0.2,
     "van": 0.2,
     "bus": 0.5,
-    "truck": 0.6,
+    "truck": 0.5,
     "motorcycle": 0.9,
+}
+
+road_defect_map = {
+    "no defects": 0.1,
+    "worn surface": 0.5,
+    "ruts/holes": 0.9,
 }
 
 brake_map = {
     "good": 0.1,
     "fair": 0.5,
-    "average": 0.5,
     "poor": 0.9,
-    "bad": 0.95,
 }
 
 time_map = {
-    "morning": 0.4,
-    "afternoon": 0.2,
-    "evening": 0.7,
-    "night": 0.8,
+    "morning": 0.6,
+    "afternoon": 0.3,
+    "evening": 0.8,
 }
 
 road_type_map = {
     "city road": 0.3,
-    "one way": 0.2,
-    "roundabout": 0.5,
-    "slip road": 0.5,
-    "highway": 0.4,
-    "rural road": 0.6,
+    "rural road": 0.5,
+    "highway": 0.9, # Made it higher apt to the interview
     "mountain road": 0.9,
 }
 
-road_defect_map = {
-    "none": 0.1,
-    "minor": 0.4,
-    "potholes": 0.7,
-    "severe": 0.9,
-}
-
 intersection_map = {
-    "none": 0.1,
-    "t-staggered": 0.5,
-    "crossroads": 0.8,
+    "no intersection": 0.2,
+    "at intersection": 0.8,
 }
 
 
