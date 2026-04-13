@@ -12,36 +12,26 @@ from PyQt6.QtWidgets import (
 )
 from PyQt6.QtCore import pyqtSignal, Qt
 from view.qt.ui_parts import CardFrame
-
-
 class RiskInputScreen(QWidget):
     evaluate_requested = pyqtSignal(dict)
     back_to_login_requested = pyqtSignal()
-
     def __init__(self, parent=None):
         super().__init__(parent)
         self._build_ui()
-
     def resizeEvent(self, event):
         super().resizeEvent(event)
-
         top_y = 210
         card_w = min(1183, self.width() - 60)
         card_h = min(678, self.height() - top_y - 40)
-
         card_w = max(820, card_w)
         card_h = max(430, card_h)
-
         x = (self.width() - card_w) // 2
         self.card.setGeometry(x, top_y, card_w, card_h)
-
     def _build_ui(self):
         self.card = CardFrame(self)
-
         outer_layout = QVBoxLayout(self.card)
         outer_layout.setContentsMargins(34, 28, 34, 28)
         outer_layout.setSpacing(18)
-
         scroll = QScrollArea()
         scroll.setWidgetResizable(True)
         scroll.setHorizontalScrollBarPolicy(Qt.ScrollBarPolicy.ScrollBarAlwaysOff)
@@ -54,20 +44,16 @@ class RiskInputScreen(QWidget):
                 background: transparent;
             }
         """)
-
         scroll_container = QWidget()
         scroll_layout = QVBoxLayout(scroll_container)
         scroll_layout.setContentsMargins(10, 10, 10, 10)
         scroll_layout.setSpacing(0)
-
         content_row = QHBoxLayout()
         content_row.setSpacing(44)
-
         left_col = QVBoxLayout()
         right_col = QVBoxLayout()
         left_col.setSpacing(20)
         right_col.setSpacing(20)
-
         self.driver_age = self._spin_row(left_col, "👤", "Driver Age", 18, 70, 30)
         self.driver_experience = self._spin_row(left_col, "🪪", "Driver Experience", 0, 50, 5)
         self.driver_alcohol = self._double_row(left_col, "🍺", "Alcohol Level", 0.0, 1.0, 0.0, 1)
@@ -75,26 +61,26 @@ class RiskInputScreen(QWidget):
             left_col,
             "💡",
             "Lighting Condition",
-            ["daylight", "dusk", "darkness-light lit", "darkness"]
+            ["daylight", "bright", "darkness-light lit", "light lit", "darkness-lights unlit", "unlit", "no lighting"]
         )
         self.road_condition = self._combo_row(
             left_col,
             "🚧",
             "Road Condition",
-            ["dry", "damp", "wet", "flood"]
+            ["dry", "normal", "wet", "slippery", "muddy", "sand", "flood"]
         )
         self.road_type = self._combo_row(
             left_col,
             "🛣️",
             "Road Infrastructure",
-            ["city road", "rural road", "highway", "mountain road"]
+            ["city road", "one way", "roundabout", "slip road", "highway", "rural road", "mountain road"]
         )
 
         self.weather = self._combo_row(
             right_col,
             "☁️",
             "Weather Condition",
-            ["clear", "windy", "fog", "rain"]
+            ["clear", "sunny", "windy", "fog", "foggy", "rain", "heavy rain", "storm"]
         )
         self.traffic_density = self._combo_row(
             right_col,
@@ -106,7 +92,7 @@ class RiskInputScreen(QWidget):
             right_col,
             "🕒",
             "Time Based Data",
-            ["morning", "afternoon", "evening"]
+            ["morning", "afternoon", "evening", "night"]
         )
         self.vehicle_age = self._spin_row(right_col, "🔧", "Vehicle Age", 0, 21, 5)
         self.failure_history = self._combo_row(
@@ -127,42 +113,15 @@ class RiskInputScreen(QWidget):
             "Brake Condition",
             ["good", "fair", "poor"]
         )
-        self.vehicle_type = self._combo_row(
-            right_col,
-            "🚙",
-            "Vehicle Type",
-            ["car", "van", "bus", "truck", "motorcycle"]
-        ) 
-        self.road_defect = self._combo_row(
-            right_col,
-            "🕳️",
-            "Road Defect",
-            ["no defect", "worn surface", "rust/holes"]
-        )
-        self.intersection_related = self._combo_row(
-            right_col,
-            "➕"
-            "Intersection",
-            ["no intersection", "at intersection"]
-        )
-        self.speed_limit = self._spin_row(
-            right_col,
-            "🚦",
-            "Speed Limit",
-            30, 213, 60
-        )
 
         content_row.addLayout(left_col, 1)
         content_row.addLayout(right_col, 1)
         scroll_layout.addLayout(content_row)
         scroll_layout.addStretch()
-
         scroll.setWidget(scroll_container)
         outer_layout.addWidget(scroll, 1)
-
         button_row = QHBoxLayout()
         button_row.addStretch()
-
         self.evaluate_btn = QPushButton("Evaluate Driving Risk")
         self.evaluate_btn.setFixedHeight(64)
         self.evaluate_btn.setMinimumWidth(320)
@@ -192,21 +151,17 @@ class RiskInputScreen(QWidget):
             }
         """)
         self.evaluate_btn.clicked.connect(self._emit_data)
-
         button_row.addWidget(self.evaluate_btn)
         button_row.addStretch()
         outer_layout.addLayout(button_row)
-
     def _make_row_container(self, icon_text: str, label_text: str):
         row = QWidget()
         row_layout = QVBoxLayout(row)
         row_layout.setContentsMargins(0, 0, 0, 0)
         row_layout.setSpacing(8)
-
         header = QHBoxLayout()
         header.setContentsMargins(0, 0, 0, 0)
         header.setSpacing(8)
-
         icon = QLabel(icon_text)
         icon.setStyleSheet("""
             QLabel {
@@ -214,7 +169,6 @@ class RiskInputScreen(QWidget):
                 color: #0A7D8C;
             }
         """)
-
         label = QLabel(label_text)
         label.setStyleSheet("""
             QLabel {
@@ -223,14 +177,11 @@ class RiskInputScreen(QWidget):
                 font-weight: 700;
             }
         """)
-
         header.addWidget(icon)
         header.addWidget(label)
         header.addStretch()
-
         row_layout.addLayout(header)
         return row, row_layout
-
     def _style_combo(self, combo: QComboBox):
         combo.setMinimumHeight(50)
         combo.setMaximumHeight(50)
@@ -249,7 +200,6 @@ class RiskInputScreen(QWidget):
                 width: 34px;
             }
         """)
-
     def _style_spin(self, widget):
         widget.setMinimumHeight(50)
         widget.setMaximumHeight(50)
@@ -264,7 +214,6 @@ class RiskInputScreen(QWidget):
                 color: #434343;
             }
         """)
-
     def _combo_row(self, parent_layout, icon_text, label_text, items):
         row, row_layout = self._make_row_container(icon_text, label_text)
         combo = QComboBox()
@@ -273,7 +222,6 @@ class RiskInputScreen(QWidget):
         row_layout.addWidget(combo)
         parent_layout.addWidget(row)
         return combo
-
     def _spin_row(self, parent_layout, icon_text, label_text, min_val, max_val, default):
         row, row_layout = self._make_row_container(icon_text, label_text)
         spin = QSpinBox()
@@ -283,7 +231,6 @@ class RiskInputScreen(QWidget):
         row_layout.addWidget(spin)
         parent_layout.addWidget(row)
         return spin
-
     def _double_row(self, parent_layout, icon_text, label_text, min_val, max_val, default, decimals):
         row, row_layout = self._make_row_container(icon_text, label_text)
         spin = QDoubleSpinBox()
@@ -295,19 +242,16 @@ class RiskInputScreen(QWidget):
         row_layout.addWidget(spin)
         parent_layout.addWidget(row)
         return spin
-
     def _emit_data(self):
         failure_map = {
             "no": 0.0,
             "yes": 1.0,
             "unknown": 0.5,
         }
-
         maintenance_map = {
             "no": 0.0,
             "yes": 1.0,
         }
-
         inputs = {
             "driver_age": int(self.driver_age.value()),
             "driver_experience": int(self.driver_experience.value()),
@@ -322,12 +266,7 @@ class RiskInputScreen(QWidget):
             "road_condition": self.road_condition.currentText(),
             "time_of_day": self.time_of_day.currentText(),
             "road_type": self.road_type.currentText(),
-            "vehicle_type": self.vehicle_type.currentText(),
-            "road_defect": self.road_defect.currentText(),
-            "intersection": self.intersection_related.currentText(),
-            "speed_limit": int(self.speed_limit.value()),
         }
-            
         self.evaluate_requested.emit(inputs)
 
     def clear_form(self):

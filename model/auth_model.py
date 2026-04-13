@@ -29,7 +29,8 @@ def _save_users(users: dict):
     _ensure_users_file()
     USERS_FILE.write_text(json.dumps(users, indent=2), encoding="utf-8")
 
-
+# SHA-256 Start
+# the password is converted into a hash using SHA-256
 def hash_password(password: str) -> str:
     return hashlib.sha256(password.encode("utf-8")).hexdigest()
 
@@ -40,10 +41,11 @@ def login(client: str, password: str) -> bool:
 
     users = _load_users()
     client = client.strip()
-
+    
+    # if the hashes match, the user is authenticated.
     if client not in users:
         return False
-
+    # the entered password is hashed again and compared with the stored hash.
     return users[client].get("password_hash") == hash_password(password)
 
 
@@ -61,6 +63,7 @@ def signup(client: str, password: str) -> tuple[bool, str]:
     if client in users:
         return False, "Client number already exists."
 
+    # the system does not store the actual password, but instead stores the hashed version inside users.json file
     users[client] = {"password_hash": hash_password(password)}
     _save_users(users)
 
